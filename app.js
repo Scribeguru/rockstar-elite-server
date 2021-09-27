@@ -1,3 +1,9 @@
+//still need:
+//mongoose (once MongoDB is set up)
+//passport-jwt (not sure if this needs to be on top of passport)
+//passport?
+//jsonwebtoken
+
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -10,6 +16,11 @@ const exerciseRouter = require('./routes/exerciseRouter');
 const workoutRouter = require('./routes/workoutRouter');
 const weightRouter = require('./routes/weightRouter');
 const archiveRouter = require('./routes/archiveRouter');
+
+const mongoose = require('mongoose');
+const connect = mongoose.connect('mongodb://localhost:27017/rockstar-elite');
+
+connect.then(() => console.log('Connected correctly to server.'), err => console.log(err));
 
 const app = express();
 
