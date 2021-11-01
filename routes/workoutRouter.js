@@ -1,4 +1,7 @@
 const express = require('express');
+const Workout = ('../models/workout');
+const authenticate = ('../authenticate');
+
 const workoutRouter = express.Router();
 
 workoutRouter.route('/')

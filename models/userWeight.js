@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const weightSchema = new Schema({
+const userWeightSchema = new Schema({
   weight: {
     type: Number,
     default: '--'
   },
-  metric: {
+  system: {
     type: String,
     required: true
   },
@@ -16,4 +16,4 @@ const weightSchema = new Schema({
   }
 });
 
-modules.export = mongoose.model('Weight', weightSchema);
+module.exports = mongoose.model('userWeight', userWeightSchema);

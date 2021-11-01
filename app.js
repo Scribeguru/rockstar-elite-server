@@ -1,14 +1,9 @@
-//still need:
-//mongoose (once MongoDB is set up)
-//passport-jwt (not sure if this needs to be on top of passport)
-//passport?
-//jsonwebtoken
-
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const passport = require('passport');
+const config = require('./config');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -18,7 +13,9 @@ const weightRouter = require('./routes/weightRouter');
 const archiveRouter = require('./routes/archiveRouter');
 
 const mongoose = require('mongoose');
-const connect = mongoose.connect('mongodb://localhost:27017/rockstar-elite');
+
+const url = config.mongoUrl;
+const connect = mongoose.connect(url);
 
 connect.then(() => console.log('Connected correctly to server.'), err => console.log(err));
 
@@ -31,23 +28,23 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/exercises', exerciseRouter);
 app.use('/workouts', workoutRouter);
-app.use('/weight', weightRouter);
+app.use('/userWeight', userWeightRouter);
 app.use('/archive', archiveRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
