@@ -7,7 +7,7 @@ const exerciseRouter = express.Router();
 exerciseRouter.route('/')
   .all(authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'application/json');
     next();
   })
   .get((req, res) => {
