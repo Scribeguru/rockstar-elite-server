@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 const selectedDetailsSchema = require('./selectedDetails');
 const userWeightSchema = require('./userWeight');
+const Schema = mongoose.Schema;
 
 const archiveSchema = new Schema({
   selected: {
@@ -9,7 +9,11 @@ const archiveSchema = new Schema({
     required: true,
     details: [selectedDetailsSchema]
   },
-  userWeight: [userWeightSchema]
+  userWeight: [userWeightSchema],
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 module.exports = mongoose.model('Archive', archiveSchema);

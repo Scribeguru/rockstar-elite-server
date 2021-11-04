@@ -11,22 +11,6 @@ const userSchema = new Schema({
   admin: {
     type: Boolean,
     default: false
-  },
-  exercises: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Exercise'
-  },
-  workouts: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Workout'
-  },
-  weight: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'userWeight'
-  },
-  archives: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Archive'
   }
 });
 

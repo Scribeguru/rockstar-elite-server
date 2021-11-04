@@ -38,7 +38,7 @@ router.post('/signup', (req, res) => {
   )
 });
 
-router.post('login', passport.authenticate('local'), (req, res) => {
+router.post('/login', passport.authenticate('local'), (req, res) => {
   const token = authenticate.getToken({ _id: req.user._id });
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');

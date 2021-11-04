@@ -5,7 +5,7 @@ const authenticate = ('../authenticate');
 const workoutRouter = express.Router();
 
 workoutRouter.route('/')
-.all((req, res, next) => {
+.all(authenticate.verifyUser, (req, res, next) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
   next();

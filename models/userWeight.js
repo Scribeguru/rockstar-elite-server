@@ -13,6 +13,10 @@ const userWeightSchema = new Schema({
   lastMeasured: {
     type: Date,
     required: true
+  },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 });
 
