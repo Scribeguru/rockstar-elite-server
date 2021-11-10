@@ -1,7 +1,20 @@
 const mongoose = require('mongoose');
-const selectedDetailsSchema = require('./selectedDetails');
-const userWeightSchema = require('./userWeight');
 const Schema = mongoose.Schema;
+
+const selectedDetailsSchema = new Schema({
+  length: {
+    type: String
+  },
+  sets: {
+    type: String
+  },
+  reps: {
+    type: String
+  },
+  weight: {
+    type: String
+  }
+});
 
 const archiveSchema = new Schema({
   selected: {
@@ -9,7 +22,10 @@ const archiveSchema = new Schema({
     required: true,
     details: [selectedDetailsSchema]
   },
-  userWeight: [userWeightSchema],
+  userWeight: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'userWeight'
+  },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

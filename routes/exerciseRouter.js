@@ -10,11 +10,27 @@ exerciseRouter.route('/')
     res.setHeader('Content-Type', 'application/json');
     next();
   })
-  .get((req, res) => {
-    res.end('READS ALL EXERCISES');
+  .get(async (req, res, next) => {
+    try {
+      const exercises = await Exercise.find({ creator: req.user._id });
+      res.json(exercises);
+    }
+    catch {
+      return next(err);
+    }
   })
-  .post((req, res) => {
-    res.end('ADDS NEW EXERCISE');
+  .post(async (req, res, next) => {
+    try {
+      const exercise = await new Exercise({
+        name: req.body.name,
+        strengthOrCardio: req.body.strengthOrCardio,
+        creator: req.user._id
+      });
+      res.json(exercise);
+    }
+    catch {
+      return next(err);
+    }
   })
   .put((req, res) => {
     res.statusCode = 403;
@@ -26,23 +42,45 @@ exerciseRouter.route('/')
   });
 
 exerciseRouter.route('/:exerciseId')
-  .all((req, res, next) => {
+  .all(authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'application/json');
     next();
   })
-  .get((req, res) => {
-    res.end(`READS EXERCISE ON /exercises/${req.params.exerciseId}`);
+  .get(async (req, res, next) => {
+    try {
+      const exercise = await Exercise.findById(req.params.exerciseId);
+      res.json(exercise);
+    }
+    catch {
+      return next(err);
+    }
   })
   .post((req, res) => {
     res.statusCode = 403;
     res.end(`POST OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`);
   })
-  .put((req, res) => {
-    res.end(`EDITS EXERCISE ON /exercises/${req.params.exerciseId}`);
+  .put(async (req, res, next) => {
+    try {
+      const exercise = await Exercise.findByIdAndUpdate(
+        { _id: req.params.exerciseId },
+        { name: req.body.newName },
+        { new: true }
+      );
+      res.json(exercise);
+    }
+    catch {
+      return next(err);
+    }
   })
-  .delete((req, res) => {
-    res.end(`DELETES EXERCISE ON /exercises/${req.params.exerciseId}`);
+  .delete(async (req, res, next) => {
+    try {
+      const exercise = await Exercise.findByIdAndDelete(req.params.campsiteId);
+      res.json(exercise);
+    }
+    catch {
+      return next(err);
+    }
   });
 
 module.exports = exerciseRouter;

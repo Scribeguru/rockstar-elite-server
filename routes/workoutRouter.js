@@ -1,6 +1,6 @@
 const express = require('express');
-const Workout = ('../models/workout');
-const authenticate = ('../authenticate');
+const Workout = require('../models/workout');
+const authenticate = require('../authenticate');
 
 const workoutRouter = express.Router();
 

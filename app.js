@@ -9,7 +9,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const exerciseRouter = require('./routes/exerciseRouter');
 const workoutRouter = require('./routes/workoutRouter');
-const weightRouter = require('./routes/weightRouter');
+const userWeightRouter = require('./routes/userWeightRouter');
 const archiveRouter = require('./routes/archiveRouter');
 
 const mongoose = require('mongoose');
