@@ -10,7 +10,7 @@ router.get('/', authenticate.verifyUser, (req, res, next) => {
   res.send('mayhaps you wish to see the users?');
 });//admin
 
-router.post('/signup', (req, res) => {
+router.post('/register', (req, res) => {
   User.register(
     new User({ username: req.body.username }),
     req.body.password,
@@ -30,7 +30,7 @@ router.post('/signup', (req, res) => {
           passport.authenticate('local')(req, res, () => {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json({ success: true, status: 'Registration Succesful.' });
+            res.json({ success: true, status: 'Registration Successful.' });
           });
         });
       }

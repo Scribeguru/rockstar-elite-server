@@ -15,7 +15,7 @@ const archiveRouter = require('./routes/archiveRouter');
 const mongoose = require('mongoose');
 
 const url = config.mongoUrl;
-const connect = mongoose.connect(url);
+const connect = mongoose.connect(url); 
 
 connect.then(() => console.log('Connected correctly to server.'), err => console.log(err));
 
