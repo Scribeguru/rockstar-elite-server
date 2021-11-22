@@ -7,12 +7,14 @@ const jwt = require('jsonwebtoken');
 
 const config = require('./config.js');
 
+//local strat (uses passport-local-mongoose)
+
 exports.local = passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+
+//jwt strat
 
 exports.getToken = user => {
-  return jwt.sign(user, config.secretKey, { expiresIn: 900 });
+  return jwt.sign(user, config.secretKey, { expiresIn: 3600 });
 };
 
 const opts = {};

@@ -5,10 +5,30 @@ const authenticate = require('../authenticate');
 
 const router = express.Router();
 
-/* GET users listing. */
-router.get('/', authenticate.verifyUser, (req, res, next) => {
-  res.send('mayhaps you wish to see the users?');
-});//admin
+/* GET & DELETE users listing. */
+//admin only
+router.get('/', async (req, res, next) => {
+  try {
+    await User.find()
+      .then(users => {
+        res.json(users);
+      });
+  }
+  catch {
+    return next(err);
+  }
+})
+  .delete('/', async (req, res, next) => {
+    try {
+      await User.deleteMany()
+      .then(deleted => {
+        res.json(deleted);
+      });
+    }
+    catch {
+      return next(err);
+    }
+  });
 
 router.post('/register', (req, res) => {
   User.register(
