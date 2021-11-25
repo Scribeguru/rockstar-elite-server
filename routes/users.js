@@ -20,10 +20,8 @@ router.get('/', async (req, res, next) => {
 })
   .delete('/', async (req, res, next) => {
     try {
-      await User.deleteMany()
-      .then(deleted => {
-        res.json(deleted);
-      });
+      const deleted = await User.deleteMany();
+      res.json(deleted);
     }
     catch {
       return next(err);
@@ -58,7 +56,7 @@ router.post('/register', (req, res) => {
   )
 });
 
-router.post('/login', passport.authenticate('local'), (req, res) => {
+router.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
   const token = authenticate.getToken({ _id: req.user._id });
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
@@ -66,7 +64,6 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 });
 
 router.get('/logout', (req, res, next) => {
-  res.clearCookie('session-id');
   res.redirect('/');
 });
 

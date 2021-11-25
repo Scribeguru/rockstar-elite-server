@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const selectedDetailsSchema = new Schema({
+  exercise: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Exercise'
+  },
   length: {
     type: String
   },
@@ -17,11 +21,6 @@ const selectedDetailsSchema = new Schema({
 });
 
 const archiveSchema = new Schema({
-  selected: {
-    type: String,
-    required: true,
-    details: [selectedDetailsSchema]
-  },
   userWeight: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'userWeight'
@@ -29,7 +28,8 @@ const archiveSchema = new Schema({
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }
+  },
+  details: [selectedDetailsSchema]
 });
 
 module.exports = mongoose.model('Archive', archiveSchema);

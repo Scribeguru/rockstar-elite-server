@@ -5,7 +5,7 @@ const authenticate = require('../authenticate');
 const exerciseRouter = express.Router();
 
 exerciseRouter.route('/')
-  .all((req, res, next) => {
+  .all(authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     next();
@@ -21,7 +21,7 @@ exerciseRouter.route('/')
   })
   .post(async (req, res, next) => {
     try {
-      const exercise = await new Exercise({
+      const exercise = await Exercise.create({
         name: req.body.name,
         strengthOrCardio: req.body.strengthOrCardio,
         creator: req.user._id
@@ -64,7 +64,7 @@ exerciseRouter.route('/:exerciseId')
     try {
       const exercise = await Exercise.findByIdAndUpdate(
         { _id: req.params.exerciseId },
-        { name: req.body.newName },
+        { name: req.body.name },
         { new: true }
       );
       res.json(exercise);
@@ -75,7 +75,7 @@ exerciseRouter.route('/:exerciseId')
   })
   .delete(async (req, res, next) => {
     try {
-      const exercise = await Exercise.findByIdAndDelete(req.params.campsiteId);
+      const exercise = await Exercise.findByIdAndDelete({_id: req.params.exerciseId});
       res.json(exercise);
     }
     catch {
