@@ -15,7 +15,7 @@ exerciseRouter.route('/')
       const exercises = await Exercise.find({ creator: req.user._id });
       res.json(exercises);
     }
-    catch {
+    catch(err) {
       return next(err);
     }
   })
@@ -28,7 +28,7 @@ exerciseRouter.route('/')
       });
       res.json(exercise);
     }
-    catch {
+    catch(err) {
       return next(err);
     }
   })
@@ -52,7 +52,7 @@ exerciseRouter.route('/:exerciseId')
       const exercise = await Exercise.findById(req.params.exerciseId);
       res.json(exercise);
     }
-    catch {
+    catch(err) {
       return next(err);
     }
   })
@@ -69,7 +69,7 @@ exerciseRouter.route('/:exerciseId')
       );
       res.json(exercise);
     }
-    catch {
+    catch(err) {
       return next(err);
     }
   })
@@ -78,7 +78,7 @@ exerciseRouter.route('/:exerciseId')
       const exercise = await Exercise.findByIdAndDelete({_id: req.params.exerciseId});
       res.json(exercise);
     }
-    catch {
+    catch(err) {
       return next(err);
     }
   });

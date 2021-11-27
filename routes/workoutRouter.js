@@ -10,11 +10,27 @@ workoutRouter.route('/')
     res.setHeader('Content-Type', 'application/json');
     next();
   })
-  .get((req, res) => {
-    res.end('READS ALL WORKOUTS');
+  .get(async (req, res) => {
+    try {
+      const workouts = await Workout.find({ creator: req.user._id });
+      res.json(workouts);
+    }
+    catch(err) {
+      return next(err);
+    }
   })
-  .post((req, res) => {
-    res.end('ADDS NEW WORKOUT');
+  .post(async (req, res, next) => {
+    try {
+      const workout = await Workout.create({
+        name: req.body.name,
+        exercises: req.body.selectedExercises,
+        creator: req.user._id
+      });
+      res.json(workout);
+    }
+    catch(err) {
+      return next(err);
+    }
   })
   .put((req, res) => {
     res.statusCode = 403;
