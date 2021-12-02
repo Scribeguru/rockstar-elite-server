@@ -23,13 +23,20 @@ const selectedDetailsSchema = new Schema({
 const archiveSchema = new Schema({
   userWeight: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'userWeight'
+    ref: 'UserWeight'
+  },
+  details: [selectedDetailsSchema],
+  date: {
+    type: Date,
+    required: true
+  },
+  comments: {
+    type: String
   },
   creator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  },
-  details: [selectedDetailsSchema]
+  }
 });
 
 module.exports = mongoose.model('Archive', archiveSchema);

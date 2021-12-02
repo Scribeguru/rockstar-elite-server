@@ -10,11 +10,31 @@ archiveRouter.route('/')
     res.setHeader('Content-Type', 'application/json');
     next();
   })
-  .get((req, res) => {
-    res.end('READS ARCHIVE LOGS');
+  .get(async (req, res, next) => {
+    try {
+      const archive = await Archive
+        .find({ creator: req.user._id });
+      res.json(archive);
+    }
+    catch (err) {
+      return next(err);
+    }
   })
-  .post((req, res) => {
-    res.end('ADDS NEW ARCHIVE LOG');
+  .post(async (req, res, next) => {
+    try {
+      const archive = await Archive
+        .create({
+          userWeight: req.body.userWeight,
+          details: req.body.details,
+          date: req.body.date,
+          comments: req.body.comments,
+          creator: req.user._id
+        });
+      res.json(archive);
+    }
+    catch (err) {
+      return next(err);
+    }
   })
   .put((req, res) => {
     res.statusCode = 403;

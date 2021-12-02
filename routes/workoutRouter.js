@@ -10,25 +10,29 @@ workoutRouter.route('/')
     res.setHeader('Content-Type', 'application/json');
     next();
   })
-  .get(async (req, res) => {
+  .get(async (req, res, next) => {
     try {
-      const workouts = await Workout.find({ creator: req.user._id });
+      let workouts = await Workout
+        .find({ creator: req.user._id })
+        .populate('exercises');
       res.json(workouts);
     }
-    catch(err) {
+    catch (err) {
       return next(err);
     }
   })
   .post(async (req, res, next) => {
     try {
-      const workout = await Workout.create({
-        name: req.body.name,
-        exercises: req.body.selectedExercises,
-        creator: req.user._id
-      });
-      res.json(workout);
+        let workout = await Workout
+        .create({
+          name: req.body.name,
+          exercises: req.body.selectedExercises,
+          creator: req.user._id
+        });
+        workout = await workout.populate('exercises');
+        res.json(workout);
     }
-    catch(err) {
+    catch (err) {
       return next(err);
     }
   })
@@ -42,24 +46,44 @@ workoutRouter.route('/')
   });
 
 workoutRouter.route('/:workoutId')
-  .all((req, res, next) => {
+  .all(authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'application/json');
     next();
   })
-  .get((req, res) => {
-    res.end(`READS WORKOUT ON /workouts/${req.params.workoutId}`);
+  .get(async (req, res, next) => {
+    try {
+      const workout = await Workout
+        .findById({ _id: req.params.workoutId })
+        .populate('exercises');
+      res.json(workout);
+    }
+    catch (err) {
+      return next(err);
+    }
   })
   .post((req, res) => {
     res.statusCode = 403;
-    res.end(`POST OPERATION FORBIDDEN ON /workouts/${req.params.workoutId}`);
+    res.end(
+      `POST OPERATION FORBIDDEN ON /workouts/${req.params.workoutId}`
+    );
   })
   .put((req, res) => {
     res.statusCode = 403;
-    res.end(`PUT OPERATION FORBIDDEN ON /workouts/${req.params.workoutId}`);
+    res.end(
+      `PUT OPERATION FORBIDDEN ON /workouts/${req.params.workoutId}`
+    );
   })
-  .delete((req, res) => {
-    res.end(`DELETES WORKOUT ON /workouts/${req.params.workoutId}`);
+  .delete(async (req, res, next) => {
+    try {
+      const workout = await Workout
+        .findOneAndDelete({ _id: req.params.workoutId })
+        .populate('exercises');
+      res.json(workout);
+    }
+    catch (err) {
+      return next(err);
+    }
   });
 
 module.exports = workoutRouter;

@@ -12,23 +12,25 @@ exerciseRouter.route('/')
   })
   .get(async (req, res, next) => {
     try {
-      const exercises = await Exercise.find({ creator: req.user._id });
+      const exercises = await Exercise
+        .find({ creator: req.user._id });
       res.json(exercises);
     }
-    catch(err) {
+    catch (err) {
       return next(err);
     }
   })
   .post(async (req, res, next) => {
     try {
-      const exercise = await Exercise.create({
-        name: req.body.name,
-        strengthOrCardio: req.body.strengthOrCardio,
-        creator: req.user._id
-      });
+      const exercise = await Exercise
+        .create({
+          name: req.body.name,
+          strengthOrCardio: req.body.strengthOrCardio,
+          creator: req.user._id
+        });
       res.json(exercise);
     }
-    catch(err) {
+    catch (err) {
       return next(err);
     }
   })
@@ -49,36 +51,44 @@ exerciseRouter.route('/:exerciseId')
   })
   .get(async (req, res, next) => {
     try {
-      const exercise = await Exercise.findById(req.params.exerciseId);
+      const exercise = await Exercise
+        .findById(req.params.exerciseId);
       res.json(exercise);
     }
-    catch(err) {
+    catch (err) {
       return next(err);
     }
   })
   .post((req, res) => {
     res.statusCode = 403;
-    res.end(`POST OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`);
+    res.end(
+      `POST OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`
+    );
   })
   .put(async (req, res, next) => {
     try {
-      const exercise = await Exercise.findByIdAndUpdate(
-        { _id: req.params.exerciseId },
-        { name: req.body.name },
-        { new: true }
-      );
+      const exercise = await Exercise
+        .findByIdAndUpdate(
+          { _id: req.params.exerciseId },
+          { name: req.body.name },
+          { new: true }
+        );
       res.json(exercise);
     }
-    catch(err) {
+    catch (err) {
       return next(err);
     }
   })
   .delete(async (req, res, next) => {
     try {
-      const exercise = await Exercise.findByIdAndDelete({_id: req.params.exerciseId});
+      const exercise = await Exercise
+        .findByIdAndDelete({
+          _id: req.params.exerciseId,
+          creator: req.user._id
+        });
       res.json(exercise);
     }
-    catch(err) {
+    catch (err) {
       return next(err);
     }
   });

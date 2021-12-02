@@ -14,7 +14,7 @@ router.get('/', async (req, res, next) => {
         res.json(users);
       });
   }
-  catch {
+  catch(err) {
     return next(err);
   }
 })
@@ -23,7 +23,7 @@ router.get('/', async (req, res, next) => {
       const deleted = await User.deleteMany();
       res.json(deleted);
     }
-    catch {
+    catch(err) {
       return next(err);
     }
   });
