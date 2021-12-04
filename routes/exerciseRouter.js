@@ -50,14 +50,10 @@ exerciseRouter.route('/:exerciseId')
     next();
   })
   .get(async (req, res, next) => {
-    try {
-      const exercise = await Exercise
-        .findById(req.params.exerciseId);
-      res.json(exercise);
-    }
-    catch (err) {
-      return next(err);
-    }
+    res.statusCode = 403;
+    res.end(
+      `GET OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`
+    );
   })
   .post((req, res) => {
     res.statusCode = 403;
@@ -66,26 +62,15 @@ exerciseRouter.route('/:exerciseId')
     );
   })
   .put(async (req, res, next) => {
-    try {
-      const exercise = await Exercise
-        .findByIdAndUpdate(
-          { _id: req.params.exerciseId },
-          { name: req.body.name },
-          { new: true }
-        );
-      res.json(exercise);
-    }
-    catch (err) {
-      return next(err);
-    }
+    res.statusCode = 403;
+    res.end(
+      `PUT OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`
+    );
   })
   .delete(async (req, res, next) => {
     try {
       const exercise = await Exercise
-        .findByIdAndDelete({
-          _id: req.params.exerciseId,
-          creator: req.user._id
-        });
+        .findByIdAndDelete({ _id: req.params.exerciseId });
       res.json(exercise);
     }
     catch (err) {

@@ -13,7 +13,21 @@ archiveRouter.route('/')
   .get(async (req, res, next) => {
     try {
       const archive = await Archive
-        .find({ creator: req.user._id });
+        .find({ creator: req.user._id })
+        .populate([
+          {
+            path: 'userWeight'
+          },
+          {
+            path: 'details',
+            populate: {
+              path: 'exercise'
+            }
+          },
+          {
+            path: 'creator'
+          }
+        ]);
       res.json(archive);
     }
     catch (err) {
@@ -22,7 +36,7 @@ archiveRouter.route('/')
   })
   .post(async (req, res, next) => {
     try {
-      const archive = await Archive
+      let archive = await Archive
         .create({
           userWeight: req.body.userWeight,
           details: req.body.details,
@@ -30,6 +44,20 @@ archiveRouter.route('/')
           comments: req.body.comments,
           creator: req.user._id
         });
+      archive = await archive
+        .populate([
+          {
+            path: 'userWeight',
+          },
+          {
+            path: 'details',
+            populate: {
+              path: 'exercise'
+            }
+          }, {
+            path: 'creator',
+          }
+        ]);
       res.json(archive);
     }
     catch (err) {
@@ -40,9 +68,15 @@ archiveRouter.route('/')
     res.statusCode = 403;
     res.end('PUT OPERATION FORBIDDEN ON /archive');
   })
-  .delete((req, res) => {
-    res.statusCode = 403;
-    res.end('DELETE OPERATION FORBIDDEN ON /archive');
+  .delete(async (req, res, next) => {
+    try {
+      const archive = await Archive
+        .deleteMany({})
+      res.json(archive);
+    }
+    catch (err) {
+      return next(err);
+    }
   });
 
 module.exports = archiveRouter;

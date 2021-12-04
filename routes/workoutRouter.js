@@ -14,7 +14,7 @@ workoutRouter.route('/')
     try {
       let workouts = await Workout
         .find({ creator: req.user._id })
-        .populate('exercises');
+        .populate('exercises creator');
       res.json(workouts);
     }
     catch (err) {
@@ -23,14 +23,15 @@ workoutRouter.route('/')
   })
   .post(async (req, res, next) => {
     try {
-        let workout = await Workout
+      let workout = await Workout
         .create({
           name: req.body.name,
           exercises: req.body.selectedExercises,
           creator: req.user._id
         });
-        workout = await workout.populate('exercises');
-        res.json(workout);
+      workout = await workout
+        .populate('exercises creator');
+      res.json(workout);
     }
     catch (err) {
       return next(err);
@@ -40,9 +41,15 @@ workoutRouter.route('/')
     res.statusCode = 403;
     res.end('PUT OPERATION FORBIDDEN ON /workouts');
   })
-  .delete((req, res) => {
-    res.statusCode = 403;
-    res.end('DELETE OPERATION FORBIDDEN ON /workouts');
+  .delete(async (req, res, next) => {
+    try {
+      const workouts = await Workout
+        .deleteMany({});
+      res.json(workouts);
+    }
+    catch (err) {
+      return next(err);
+    }
   });
 
 workoutRouter.route('/:workoutId')
@@ -55,7 +62,7 @@ workoutRouter.route('/:workoutId')
     try {
       const workout = await Workout
         .findById({ _id: req.params.workoutId })
-        .populate('exercises');
+        .populate('exercises creator');
       res.json(workout);
     }
     catch (err) {
@@ -78,7 +85,6 @@ workoutRouter.route('/:workoutId')
     try {
       const workout = await Workout
         .findOneAndDelete({ _id: req.params.workoutId })
-        .populate('exercises');
       res.json(workout);
     }
     catch (err) {
