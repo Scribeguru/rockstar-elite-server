@@ -26,7 +26,7 @@ workoutRouter.route('/')
       let workout = await Workout
         .create({
           name: req.body.name,
-          exercises: req.body.selectedExercises,
+          exercises: req.body.exercises,
           creator: req.user._id
         });
       workout = await workout
@@ -42,14 +42,8 @@ workoutRouter.route('/')
     res.end('PUT OPERATION FORBIDDEN ON /workouts');
   })
   .delete(async (req, res, next) => {
-    try {
-      const workouts = await Workout
-        .deleteMany({});
-      res.json(workouts);
-    }
-    catch (err) {
-      return next(err);
-    }
+    res.statusCode = 403;
+    res.end('DELETE OPERATION FORBIDDEN ON /workouts');
   });
 
 workoutRouter.route('/:workoutId')

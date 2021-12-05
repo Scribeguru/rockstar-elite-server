@@ -39,6 +39,16 @@ exports.jwtPassport = passport.use(
   )
 );
 
+exports.verifyAdmin = (req, res, next) => {
+  if (!req.user.admin) {
+    const err = new Error('You are not authorized to perform this operation.');
+    err.status = 403;
+    return next(err);
+  } else {
+    return next();
+  }
+};
+
 //not only do I need to ensure the user is authenticated to access each endpoint, I also need to make sure the data at each endpoint is unique to the user...
 //later on I'll need to make myself the sole admin, capable of deleting users.
 
