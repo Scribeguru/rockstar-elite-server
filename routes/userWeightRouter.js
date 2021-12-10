@@ -5,7 +5,7 @@ const authenticate = require('../authenticate');
 const userWeightRouter = express.Router();
 
 userWeightRouter.route('/')
-  .all(authenticate.verifyUser, (req, res, next) => {
+  .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     next();
@@ -40,15 +40,9 @@ userWeightRouter.route('/')
     res.statusCode = 403;
     res.end('PUT OPERATION FORBIDDEN ON /userWeight');
   })
-  .delete(async (req, res, next) => {
-    try {
-      const userWeight = await UserWeight
-        .deleteMany({});
-      res.json(userWeight);
-    }
-    catch (err) {
-      return next(err);
-    }
+  .delete((req, res) => {
+    res.statusCode = 403;
+    res.end('DELETE OPERATION FORBIDDEN ON /userWeight');
   });
 
 module.exports = userWeightRouter;

@@ -7,7 +7,7 @@ const router = express.Router();
 
 /* GET & DELETE users listing. */
 //admin only
-router.get('/', async (req, res, next) => {
+router.get('/', authenticate.verifyAdmin, async (req, res, next) => {
   try {
     await User.find()
       .then(users => {
@@ -18,15 +18,6 @@ router.get('/', async (req, res, next) => {
     return next(err);
   }
 })
-  .delete('/', async (req, res, next) => {
-    try {
-      const deleted = await User.deleteMany();
-      res.json(deleted);
-    }
-    catch(err) {
-      return next(err);
-    }
-  });
 
 router.post('/register', (req, res) => {
   User.register(
@@ -56,15 +47,22 @@ router.post('/register', (req, res) => {
   )
 });
 
-router.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
-  const token = authenticate.getToken({ _id: req.user._id });
+router.post('/login', passport.authenticate('local'), (req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
-  res.json({ success: true, token, status: 'You are logged in.' });
+  res.json({ success: true, status: 'You are logged in.' });
 });
 
 router.get('/logout', (req, res, next) => {
-  res.redirect('/');
+  if (req.session) {
+    req.session.destroy();
+    res.clearCookie('session-id');
+    res.redirect('/');
+  } else {
+    const err = new Error(`You are not logged in.`);
+    err.status = 401;
+    return next(err);
+  }
 });
 
 module.exports = router;

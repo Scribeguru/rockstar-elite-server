@@ -4,6 +4,8 @@ const path = require('path');
 const logger = require('morgan');
 const passport = require('passport');
 const config = require('./config');
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -39,6 +41,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+  name: 'session-id',
+  secret: config.secretKey,
+  saveUninitialized: false,
+  resave: false,
+  store: new FileStore()
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

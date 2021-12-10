@@ -5,7 +5,7 @@ const authenticate = require('../authenticate');
 const exerciseRouter = express.Router();
 
 exerciseRouter.route('/')
-  .all(authenticate.verifyUser, (req, res, next) => {
+  .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     next();
@@ -44,25 +44,22 @@ exerciseRouter.route('/')
   });
 
 exerciseRouter.route('/:exerciseId')
-  .all(authenticate.verifyUser, (req, res, next) => {
-    res.statusCode = 200;
+  .all((req, res, next) => {
+    res.statusCode = 403;
     res.setHeader('Content-Type', 'application/json');
     next();
   })
-  .get(async (req, res, next) => {
-    res.statusCode = 403;
+  .get((req, res) => {
     res.end(
       `GET OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`
     );
   })
   .post((req, res) => {
-    res.statusCode = 403;
     res.end(
       `POST OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`
     );
   })
-  .put(async (req, res, next) => {
-    res.statusCode = 403;
+  .put((req, res) => {
     res.end(
       `PUT OPERATION FORBIDDEN ON /exercises/${req.params.exerciseId}`
     );
@@ -71,6 +68,7 @@ exerciseRouter.route('/:exerciseId')
     try {
       const exercise = await Exercise
         .findByIdAndDelete({ _id: req.params.exerciseId });
+      res.statusCode = 200;
       res.json(exercise);
     }
     catch (err) {

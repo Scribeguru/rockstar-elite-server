@@ -5,7 +5,7 @@ const authenticate = require('../authenticate');
 const workoutRouter = express.Router();
 
 workoutRouter.route('/')
-  .all(authenticate.verifyUser, (req, res, next) => {
+  .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     next();
@@ -41,13 +41,13 @@ workoutRouter.route('/')
     res.statusCode = 403;
     res.end('PUT OPERATION FORBIDDEN ON /workouts');
   })
-  .delete(async (req, res, next) => {
+  .delete((req, res) => {
     res.statusCode = 403;
     res.end('DELETE OPERATION FORBIDDEN ON /workouts');
   });
 
 workoutRouter.route('/:workoutId')
-  .all(authenticate.verifyUser, (req, res, next) => {
+  .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     next();

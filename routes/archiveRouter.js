@@ -5,7 +5,7 @@ const authenticate = require('../authenticate');
 const archiveRouter = express.Router();
 
 archiveRouter.route('/')
-  .all(authenticate.verifyUser, (req, res, next) => {
+  .all((req, res, next) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     next();
@@ -21,11 +21,8 @@ archiveRouter.route('/')
           {
             path: 'details',
             populate: {
-              path: 'exercise'
+              path: 'archive'
             }
-          },
-          {
-            path: 'creator'
           }
         ]);
       res.json(archive);
@@ -52,10 +49,8 @@ archiveRouter.route('/')
           {
             path: 'details',
             populate: {
-              path: 'exercise'
+              path: 'archive'
             }
-          }, {
-            path: 'creator',
           }
         ]);
       res.json(archive);
@@ -68,10 +63,37 @@ archiveRouter.route('/')
     res.statusCode = 403;
     res.end('PUT OPERATION FORBIDDEN ON /archive');
   })
+  .delete((req, res) => {
+    res.statusCode = 403;
+    res.end('DELETE OPERATION FORBIDDEN ON /archive');
+  });
+
+archiveRouter.route('/:archiveId')
+  .all((req, res, next) => {
+    res.statusCode = 403;
+    res.setHeader('Content-Type', 'application/json');
+    next();
+  })
+  .get((req, res) => {
+    res.end(
+      `GET OPERATION FORBIDDEN ON /archive/${req.params.archiveId}`
+    );
+  })
+  .post((req, res) => {
+    res.end(
+      `POST OPERATION FORBIDDEN ON /archive/${req.params.archiveId}`
+    );
+  })
+  .put((req, res) => {
+    res.end(
+      `PUT OPERATION FORBIDDEN ON /archive/${req.params.archiveId}`
+    );
+  })
   .delete(async (req, res, next) => {
     try {
       const archive = await Archive
-        .deleteMany({})
+        .findByIdAndDelete({ _id: req.params.archiveId });
+      res.statusCode = 200;
       res.json(archive);
     }
     catch (err) {
