@@ -1,6 +1,5 @@
 const express = require('express');
 const UserWeight = require('../models/userWeight');
-const authenticate = require('../authenticate');
 
 const userWeightRouter = express.Router();
 
@@ -13,8 +12,7 @@ userWeightRouter.route('/')
   .get(async (req, res, next) => {
     try {
       const userWeight = await UserWeight
-        .find({ creator: req.user._id })
-        .sort({ lastMeasured: -1 });
+        .find({ creator: req.user._id });
       res.json(userWeight[0]);
     }
     catch (err) {

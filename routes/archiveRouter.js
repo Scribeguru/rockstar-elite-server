@@ -1,6 +1,5 @@
 const express = require('express');
 const Archive = require('../models/archive');
-const authenticate = require('../authenticate');
 
 const archiveRouter = express.Router();
 

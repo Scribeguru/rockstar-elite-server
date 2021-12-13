@@ -39,7 +39,6 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
@@ -49,6 +48,8 @@ app.use(session({
   resave: false,
   store: new FileStore()
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

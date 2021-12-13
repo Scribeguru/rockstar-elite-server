@@ -17,7 +17,7 @@ router.get('/', authenticate.verifyAdmin, async (req, res, next) => {
   catch(err) {
     return next(err);
   }
-})
+});
 
 router.post('/register', (req, res) => {
   User.register(
@@ -50,7 +50,7 @@ router.post('/register', (req, res) => {
 router.post('/login', passport.authenticate('local'), (req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
-  res.json({ success: true, status: 'You are logged in.' });
+  res.json({ success: true, status: 'You are logged in.'});
 });
 
 router.get('/logout', (req, res, next) => {
