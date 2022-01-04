@@ -5,7 +5,8 @@ const logger = require('morgan');
 const passport = require('passport');
 const config = require('./config');
 const session = require('express-session');
-const FileStore = require('session-file-store')(session);
+const MongoStore = require('connect-mongo')(session);
+const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -17,12 +18,15 @@ const archiveRouter = require('./routes/archiveRouter');
 const mongoose = require('mongoose');
 
 const url = config.mongoUrl;
-const connect = mongoose.connect(url); 
+const connect = mongoose.connect(url);
 
 connect.then(() => console.log('Connected correctly to server.'), err => console.log(err));
 
 const app = express();
 
+app.disable('x-powered-by');
+
+//secure traffic only
 app.all('*', (req, res, next) => {
   if (req.secure) {
     return next();
@@ -36,6 +40,14 @@ app.all('*', (req, res, next) => {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(
+  cors({
+    origin: 'http://localhost:3001',
+    credentials: true,
+    methods: ['GET', 'POST', 'DELETE']
+  })
+);
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -46,8 +58,17 @@ app.use(session({
   secret: config.secretKey,
   saveUninitialized: false,
   resave: false,
-  store: new FileStore()
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    collection: 'session',
+    ttl: 1000 * 60 * 60 * 2 / 1000
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 2
+    //secure: true once online
+  }
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 

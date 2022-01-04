@@ -55,7 +55,7 @@ workoutRouter.route('/:workoutId')
     try {
       const workout = await Workout
         .findById({ _id: req.params.workoutId })
-        .populate('exercises creator');
+        .populate('exercises');
       res.json(workout);
     }
     catch (err) {
