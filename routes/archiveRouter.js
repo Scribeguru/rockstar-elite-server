@@ -13,17 +13,7 @@ archiveRouter.route('/')
     try {
       const archive = await Archive
         .find({ creator: req.user._id })
-        .populate([
-          {
-            path: 'userWeight'
-          },
-          {
-            path: 'details',
-            populate: {
-              path: 'archive'
-            }
-          }
-        ]);
+        .populate('userWeight');
       res.json(archive);
     }
     catch (err) {
@@ -35,23 +25,13 @@ archiveRouter.route('/')
       let archive = await Archive
         .create({
           userWeight: req.body.userWeight,
-          details: req.body.details,
+          exerciseDetails: req.body.exerciseDetails,
           date: req.body.date,
           comments: req.body.comments,
           creator: req.user._id
         });
       archive = await archive
-        .populate([
-          {
-            path: 'userWeight',
-          },
-          {
-            path: 'details',
-            populate: {
-              path: 'archive'
-            }
-          }
-        ]);
+        .populate('userWeight');
       res.json(archive);
     }
     catch (err) {

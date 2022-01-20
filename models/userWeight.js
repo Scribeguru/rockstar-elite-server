@@ -6,8 +6,8 @@ const userWeightSchema = new Schema({
     type: Number,
     default: '--'
   },
-  system: {
-    type: String,
+  systemIsMetric: {
+    type: Boolean,
     required: true
   },
   lastMeasured: {

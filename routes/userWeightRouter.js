@@ -13,7 +13,7 @@ userWeightRouter.route('/')
     try {
       const userWeight = await UserWeight
         .find({ creator: req.user._id });
-      res.json(userWeight[0]);
+      res.json(userWeight[userWeight.length - 1]);
     }
     catch (err) {
       return next(err);
@@ -24,7 +24,7 @@ userWeightRouter.route('/')
       const userWeight = await UserWeight
         .create({
           weight: req.body.weight,
-          system: req.body.system,
+          systemIsMetric: req.body.systemIsMetric,
           lastMeasured: req.body.lastMeasured,
           creator: req.user._id
         });

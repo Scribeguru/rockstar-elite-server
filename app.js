@@ -77,7 +77,7 @@ app.use('/users', usersRouter);
 app.use('/exercises', exerciseRouter);
 app.use('/workouts', workoutRouter);
 app.use('/userWeight', userWeightRouter);
-app.use('/archive', archiveRouter);
+app.use('/archive', archiveRouter);``
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
