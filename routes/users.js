@@ -19,6 +19,10 @@ router.get('/', authenticate.verifyAdmin, async (req, res, next) => {
   }
 });
 
+router.get('/isLoggedIn', (req, res) => {
+  (req.user._id) ? res.end(true) : res.end(false);
+})
+
 router.post('/register', (req, res) => {
   User.register(
     new User({ username: req.body.username }),
