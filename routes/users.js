@@ -14,10 +14,16 @@ router.get('/', authenticate.verifyAdmin, async (req, res, next) => {
         res.json(users);
       });
   }
-  catch(err) {
+  catch (err) {
     return next(err);
   }
 });
+
+router.get('/isLoggedIn', (req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  (req.user) ? res.send(true) : res.send(false);
+})
 
 router.post('/register', (req, res) => {
   User.register(
@@ -50,7 +56,7 @@ router.post('/register', (req, res) => {
 router.post('/login', passport.authenticate('local'), (req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
-  res.json({ success: true, status: 'You are logged in.'});
+  res.json({ success: true, status: 'You are logged in.' });
 });
 
 router.get('/logout', (req, res, next) => {
