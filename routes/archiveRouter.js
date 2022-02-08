@@ -14,7 +14,7 @@ archiveRouter.route('/')
       const archive = await Archive
         .find({ creator: req.user._id })
         .populate('userWeight');
-      res.json(archive);
+      res.json(archive.reverse());
     }
     catch (err) {
       return next(err);

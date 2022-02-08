@@ -7,6 +7,7 @@ const config = require('./config');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const cors = require('cors');
+require('dotenv').config();
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -20,7 +21,7 @@ const mongoose = require('mongoose');
 const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 
-connect.then(() => console.log('Connected correctly to server.'), err => console.log(err));
+connect.then(() => console.log('Connected correctly to mongoDB.'), err => console.log(err));
 
 const app = express();
 
@@ -64,8 +65,9 @@ app.use(session({
     ttl: 1000 * 60 * 60 * 2 / 1000
   }),
   cookie: {
-    maxAge: 1000 * 60 * 60 * 2
-    //secure: true once online
+    maxAge: 1000 * 60 * 60 * 2,
+    sameSite: "None",
+    secure: "true"
   }
 }));
 
@@ -77,7 +79,7 @@ app.use('/users', usersRouter);
 app.use('/exercises', exerciseRouter);
 app.use('/workouts', workoutRouter);
 app.use('/userWeight', userWeightRouter);
-app.use('/archive', archiveRouter);``
+app.use('/archive', archiveRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
