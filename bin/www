@@ -9,6 +9,7 @@ const debug = require('debug')('rockstar-elite-server:server');
 const http = require('http');
 const https = require('https');
 const fs = require('fs');
+require('dotenv').config();
 
 /**
  * Get port from environment and store in Express.
