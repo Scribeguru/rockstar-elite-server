@@ -73,12 +73,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/exercises', exerciseRouter);
-app.use('/workouts', workoutRouter);
-app.use('/userWeight', userWeightRouter);
-app.use('/archive', archiveRouter);
+// app.use('/', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/exercises', exerciseRouter);
+app.use('/api/workouts', workoutRouter);
+app.use('/api/userWeight', userWeightRouter);
+app.use('/api/archive', archiveRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
