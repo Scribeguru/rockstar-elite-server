@@ -7,4 +7,4 @@
   <li>Passport Local + Express Session for user authentication</li>
   <li>Receives, stores, and deletes user data upon request provided user is authenticated at corresponding route</li>
 </ul>
-<h1>Try it out at <a href="https://rockstarelite.xyz" target="_blank">rockstarelite.xyz</a></h1>
+<h1>Try it out at <a href="https://rockstarelite.xyz" target="blank">rockstarelite.xyz</a></h1>
